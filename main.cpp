@@ -1,9 +1,11 @@
 #define GLUT_DISABLE_ATEXIT_HACK
 
 #include "glut.h"
-
+#include <math.h>       /* sin */
+#include <iostream>
 #define KEY_ESC 27
 
+using namespace std;
 //dibuja un simple gizmo
 void displayGizmo()
 {
@@ -51,7 +53,7 @@ void displayCuadrado(float x, float y, int tamArista)
 
 }
 
-void displayCirculo0(float x, float y, int tamRadio)
+void displayCirculo(float x, float y, int tamRadio)
 {
     /*glBegin(GL_LINES);
     float x1,y1,x2,y2,x3,y3,x4,y4,x5,y5;
@@ -127,6 +129,59 @@ void displayCirculo0(float x, float y, int tamRadio)
 
 }
 
+
+void displayCirculitos(float x, float y, float radio) //Centro y radio
+{
+     //Cuadrante 1
+     x = 0;
+     y = radio;
+     while (x < y)
+     {
+         y = sqrt(pow(radio,2)-pow(x,2));
+         glPointSize(2);
+         glBegin(GL_POINTS);
+         glVertex2f(x,y);
+         glEnd();
+         x++;
+     }
+
+    //Cuadrante 2
+    while (x < radio)
+    {
+        y = sqrt(pow(radio,2)-pow(x,2));
+        glPointSize(2);
+        glBegin(GL_POINTS);
+        glVertex2f(x,y);
+        glEnd();
+        x++;
+    }
+
+    //Cuadrante 4
+    x = 0;
+    y = radio * -1;
+    while (x > y)
+    {
+        y = sqrt(pow(radio,2)-pow(x,2));
+        y *= -1;
+        glPointSize(2);
+        glBegin(GL_POINTS);
+        glVertex2f(x,y);
+        glEnd();
+        x--;
+    }
+    /*const float PI =3.141592653;
+    for ( float angle = 0; angle <= 2*PI; angle+=0.01)
+    {
+        x =( 0.3) * cos (angle);
+        y =( 0.3) * sin (angle);
+        glPointSize(10);
+        glBegin(GL_POINTS);
+        glVertex2f(x,y);
+        glEnd();
+
+    }*/
+}
+
 //funcion llamada a cada imagen
 void glPaint(void) {
 
@@ -142,7 +197,10 @@ void glPaint(void) {
     //displayCuadrado(0,0,5);
 
     //dibuja el circulo
-    displayCirculo0(0,0,5);
+    //displayCirculo(0,0,5);
+
+    //dibuja Multiples Circulos
+    displayCirculitos(0,0,5);
 
     //doble buffer, mantener esta instruccion al fin de la funcion
     glutSwapBuffers();
