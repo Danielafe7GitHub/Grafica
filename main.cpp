@@ -1,7 +1,6 @@
 #define GLUT_DISABLE_ATEXIT_HACK
-
-#include "glut.h"
-#include <math.h>       /* sin */
+#include <math.h>
+#include <GL/glut.h>
 #include <iostream>
 #define KEY_ESC 27
 
@@ -19,169 +18,129 @@ void displayGizmo()
     glEnd();
 }
 
-//Practica Ejercicio 1 Funcion que Dibujo un Cuadrado: Parámetros centro y tamArista
+//ROJO
+//1. Elaborar una función que permite crear un cuadrado gracias a una línea cerrada. Esta función tomara como parámetro, su centro y el tamaño de su arista.
 
 void displayCuadrado(float x, float y, int tamArista)
 {
-    /*              1
+    /*    1              2
      *     ------------
-     *     |            |
-     *  4  |            |      2
-     *     |            |
+     *     |          |
+     *     |    xy    |
+     *     |          |
      *     ------------
-     *              3
+     *   4              3
      */
-    glBegin(GL_LINES);
+    glBegin(GL_LINE_LOOP);
     //Lateral 1
     glColor3d(255,0,0);
-    glVertex2d(x-tamArista,y+tamArista);
-    glVertex2d(x+tamArista, y+tamArista);
+    glVertex2d(x-tamArista/2,y+tamArista/2);
     //Lateral 2
     glColor3d(255,0,0);
-    glVertex2d(x+tamArista,y+tamArista);
-    glVertex2d(x+tamArista,y-tamArista);
+    glVertex2d(x+tamArista/2,y+tamArista/2);
     //Lateral 3
     glColor3d(255,0,0);
-    glVertex2d(x-tamArista,y-tamArista);
-    glVertex2d(x+tamArista,y-tamArista);
+    glVertex2d(x+tamArista/2,y-tamArista/2);
     //Lateral 4
     glColor3d(255,0,0);
-    glVertex2d(x-tamArista,y+tamArista);
-    glVertex2d(x-tamArista,y-tamArista);
+    glVertex2d(x-tamArista/2,y-tamArista/2);
     glEnd();
 
 
 }
-
-void displayCirculo(float x, float y, int tamRadio)
+/// VERDE
+///2. Elaborar una función que permite crear un círculo gracias a una línea cerrada. Esta función tomara como parámetro, su centro y su radio.
+void displayCirculo(float xo, float yo, int tamRadio)
 {
-    /*glBegin(GL_LINES);
-    float x1,y1,x2,y2,x3,y3,x4,y4,x5,y5;
-    x1 = x; y1 = y + tamRadio;
-    x2 = x + tamRadio; y2 = y;
-    x3 = x; y3 = y - tamRadio;
-    x4 = x - tamRadio; y4 = y;
-    x5 = x1; y5 = y1;
-   */
-    //Punto 2
-    float x2 = x - tamRadio/2;
-    float y2 = y + tamRadio;
-    //Punto 3
-    float x3 = x +tamRadio/2;
-    float y3 = y +tamRadio;
-    //Punto 1
-    float x1 = x - tamRadio;
-    float y1 = y + tamRadio/2;
-    //Punto 8
-    float x8 = x - tamRadio;
-    float y8 = y - tamRadio/2;
-    //Punto 4
-    float x4 = x + tamRadio;
-    float y4 = y + tamRadio/2;
-    //Punto 5
-    float x5 = x + tamRadio;
-    float y5 = y - tamRadio/2;
-    //Punto 7
-    float x7 = x -tamRadio/2;
-    float y7 = y - tamRadio;
-    //Punto 6
-    float x6 = x + tamRadio/2;
-    float y6 = y -tamRadio;
-
-
-    glBegin(GL_LINES);
-    glColor3d(255,0,0);
-    glVertex2d(x1,y1);
-    glVertex2d(x2,y2);
-
-    glColor3d(255,0,0);
-    glVertex2d(x2,y2);
-    glVertex2d(x3,y3);
-
-    glColor3d(255,0,0);
-    glVertex2d(x3,y3);
-    glVertex2d(x4,y4);
-
-
-    glColor3d(255,0,0);
-    glVertex2d(x4,y4);
-    glVertex2d(x5,y5);
-
-    glColor3d(255,0,0);
-    glVertex2d(x5,y5);
-    glVertex2d(x6,y6);
-
-    glColor3d(255,0,0);
-    glVertex2d(x6,y6);
-    glVertex2d(x7,y7);
-
-    glColor3d(255,0,0);
-    glVertex2d(x7,y7);
-    glVertex2d(x8,y8);
-
-    glColor3d(255,0,0);
-    glVertex2d(x8,y8);
-    glVertex2d(x1,y1);
-
-
+    /*Cos(0),sin(0) = (1,0) so on */
+    double PI =  3.1415926;
+    int iMax = 3000;
+    glColor3d(0,255,1);
+    glBegin(GL_LINE_LOOP);
+    for(int i =0; i <= iMax  ; i++){
+        double angle = 2 * PI * i / iMax ; //A más i más perfecto el círculo
+        double x = cos(angle) * tamRadio;   //Lo multiplicamos por el Radio, así se hace más grande la circunferencia
+        double y = sin(angle) * tamRadio;
+        glVertex2d(x+xo,y+yo);
+    }
     glEnd();
+
+
+
 
 
 }
 
-
-void displayCirculitos(float x, float y, float radio) //Centro y radio
+///AZUL
+///3. Elaborar una función en OpenGL que permite obtener el resultado siguiente :Circulo de cìrculo
+///La cantidad de círculos y el porcentaje de reducción del radio serán definidos por el usuario.
+void displayCirculos(float x, float y, int tamRadio/*Ini*/, int num, float reduccion)
 {
-     //Cuadrante 1
-     x = 0;
-     y = radio;
-     while (x < y)
-     {
-         y = sqrt(pow(radio,2)-pow(x,2));
-         glPointSize(2);
-         glBegin(GL_POINTS);
-         glVertex2f(x,y);
-         glEnd();
-         x++;
-     }
-
-    //Cuadrante 2
-    while (x < radio)
+    for(int i=0;i<num;i++)
     {
-        y = sqrt(pow(radio,2)-pow(x,2));
-        glPointSize(2);
-        glBegin(GL_POINTS);
-        glVertex2f(x,y);
-        glEnd();
-        x++;
+        displayCirculo(x,y,tamRadio);
+        tamRadio -= reduccion;
+        x -= reduccion;
+
     }
 
-    //Cuadrante 4
-    x = 0;
-    y = radio * -1;
-    while (x > y)
+
+}
+/// AMARILLO
+///4. Elaborar una función en OpenGL que permite obtener el resultado siguiente : circulos decrecientes
+///El primer círculo es el de la izquierda. La cantidad de círculos y el porcentaje de reducción del radioserán definidos por el usuario.
+void displayCirculosDec(float x, float y, int tamRadio/*Ini*/, int num, float reduccion)
+{
+    cout<<"numCirculos : "<<num<<endl;
+
+    for(int i=0;i<num;i++)
     {
-        y = sqrt(pow(radio,2)-pow(x,2));
-        y *= -1;
-        glPointSize(2);
-        glBegin(GL_POINTS);
-        glVertex2f(x,y);
-        glEnd();
-        x--;
+        displayCirculo(x,y,tamRadio);
+        tamRadio -= reduccion;
+        x += 2*tamRadio + reduccion;
+
     }
-    /*const float PI =3.141592653;
-    for ( float angle = 0; angle <= 2*PI; angle+=0.01)
+}
+
+/// CELESTE
+///4. Elaborar una función en OpenGL que permite obtener el resultado siguiente : circulos decrecientes diagonal
+///La cantidad de círculos, el porcentaje de reducción del radio y el Angulo serán definidos por el usuario.
+void displayCirculosDiag(double xo, double yo, int tamRadio/*Ini*/, int num, float reduccion, float angulo)
+{
+    /*for(int i=0;i<num;i++)
     {
-        x =( 0.3) * cos (angle);
-        y =( 0.3) * sin (angle);
-        glPointSize(10);
-        glBegin(GL_POINTS);
-        glVertex2f(x,y);
-        glEnd();
+        displayCirculo(x,y,tamRadio);
+        tamRadio -= reduccion;
+        x += 2*tamRadio + reduccion;
+        y += tan(angulo) * x;
 
     }*/
-}
 
+    double m = tan(angulo);
+    cout<<"Pendiente : "<<m<<endl;
+    double x,y,c;  //(y-yo) = m(x-xo) --> y = mx + c
+    for(int i=0;i<num;i++)
+    {
+        c = -xo*m+yo;
+        y = m*xo+c;
+        x = (yo - c)/m;
+
+        //Línea Recta
+        /*glColor3d(255,0,255);
+        glBegin(GL_POINTS);
+        glVertex2d(x,y);
+        glEnd();
+        xo++; yo++;*/
+
+        displayCirculo(x,y,tamRadio);
+        xo += 1.3*tamRadio ;
+        yo += 1.3*tamRadio ;
+        tamRadio -= reduccion;
+
+    }
+
+
+}
 //funcion llamada a cada imagen
 void glPaint(void) {
 
@@ -191,16 +150,22 @@ void glPaint(void) {
 
 
     //dibuja el gizmo
-    //displayGizmo();
+    displayGizmo();
 
     //dibuja el cuadrado
-    //displayCuadrado(0,0,5);
+    displayCuadrado(-20,10,5);
 
     //dibuja el circulo
-    //displayCirculo(0,0,5);
+    displayCirculo(0,10,5);
 
-    //dibuja Multiples Circulos
-    displayCirculitos(0,0,5);
+    //dibuja el circulos
+    displayCirculos(20,10,5,5,1);
+
+    //dibuja el circulos decrecientes
+    displayCirculosDec(-20,-10,5,5,1);
+
+    //dibuja el circulos decrecientes; el num Radio = num Circulos ??
+    displayCirculosDiag(-40,-40,5,5,1,30);
 
     //doble buffer, mantener esta instruccion al fin de la funcion
     glutSwapBuffers();
